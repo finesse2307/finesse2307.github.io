@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sagar Hegde | Data Analyst Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            /* Data Dashboard Color Palette */
+            --dashboard-bg: #0A0E27;
+            --card-bg: #141B3D;
+            --accent-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-purple: #8B5CF6;
+            --accent-orange: #F59E0B;
+            --accent-teal: #14B8A6;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border-color: #1E293B;
+            --grid-line: rgba(148, 163, 184, 0.1);
+            --metric-red: #EF4444;
+            --metric-green: #10B981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dashboard-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        /* Navigation - Dashboard Style */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-logo .accent {
+            color: var(--accent-blue);
+        }
+        
+        .nav-logo .role {
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--accent-blue);
+        }
+        
+        .nav-cta {
+            padding: 0.6rem 1.3rem;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif !important;
+        }
+        
+        .nav-cta:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+        
+        /* Hero Section - Dashboard Header */
+        .hero {
+            padding: 10rem 0 6rem;
+            background: linear-gradient(135deg, #0A0E27 0%, #141B3D 100%);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 49px, var(--grid-line) 49px, var(--grid-line) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 49px, var(--grid-line) 49px, var(--grid-line) 50px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--metric-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+            font-weight: 800;
+        }
+        
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            max-width: 800px;
+        }
+        
+        /* KPI Dashboard Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+        
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .kpi-trend {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .kpi-trend.up {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--metric-green);
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .kpi-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-header {
+            text-align: left;
+            margin-bottom: 4rem;
+        }
+        
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+        
+        /* Domain Section Headers */
+        .domain-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .domain-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .domain-info h3 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+        
+        .domain-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        /* Project Cards - Dashboard Panels */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+        }
+        
+        .project-visual {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .project-visual canvas {
+            border-radius: 8px;
+            background: rgba(10, 14, 39, 0.5);
+            padding: 1rem;
+        }
+        
+        .project-content {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Mono', monospace;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+        
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-badge {
+            padding: 0.4rem 0.8rem;
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            border-radius: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            border: 1px solid var(--border-color);
+        }
+        
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .project-link:hover {
+            gap: 0.8rem;
+            color: var(--accent-teal);
+        }
+        
+        /* Coming Soon Card */
+        .coming-soon-card {
+            opacity: 0.6;
+            border-style: dashed;
+        }
+        
+        .coming-soon-visual {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+        
+        .coming-soon-content {
+            text-align: center;
+        }
+        
+        .coming-soon-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+        
+        /* Skills Section - Data Stack */
+        .skills-section {
+            background: var(--dashboard-bg);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        
+        .skill-category {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-category:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+        }
+        
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .skill-category h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+        
+        .skill-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .skill-list {
+            list-style: none;
+        }
+        
+        .skill-list li {
+            color: var(--text-secondary);
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .skill-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+        
+        /* Contact Section - CTA Dashboard */
+        .contact-section {
+            background: linear-gradient(135deg, #0A0E27 0%, #141B3D 100%);
+            position: relative;
+        }
+        
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .contact-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .contact-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+        
+        .contact-email {
+            display: inline-block;
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            font-family: 'IBM Plex Mono', monospace;
+            padding: 1rem 2rem;
+            border: 2px solid var(--accent-blue);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-email:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+        
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .social-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .social-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+        }
+        
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .social-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dashboard-bg);
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            margin: 5% auto;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        @keyframes slideUp {
+            from { 
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 2rem 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 2rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(148, 163, 184, 0.1);
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .modal-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Mono', monospace;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .modal-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .modal-body {
+            padding: 2.5rem;
+        }
+        
+        .modal-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .modal-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .modal-section h3 {
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .modal-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .modal-section ul li {
+            color: var(--text-secondary);
+            padding: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .modal-section ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+        
+        .modal-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .modal-metric {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .modal-metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            font-family: 'IBM Plex Mono', monospace;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-metric-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .modal-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .modal-header {
+                padding: 1.5rem;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+            
+            .modal-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+            
+            .container {
+                padding: 0 1.5rem;
+            }
+            
+            .nav-menu li:not(:last-child) {
+                display: none;
+            }
+            
+            .hero {
+                padding: 8rem 0 4rem;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            section {
+                padding: 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="accent">SAGAR.HEGDE</span>
+                <span class="role">// DATA_ANALYST</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#work">[PROJECTS]</a></li>
+                <li><a href="#skills">[SKILLS]</a></li>
+                <li><a href="#contact">[CONTACT]</a></li>
+                <li><a href="/cdn-cgi/l/email-protection#dfacacb7bab8bbba9fa8afb6f1babbaa" class="nav-cta">Hire Me</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-label">
+                    <span class="status-dot"></span>
+                    MS Information Technology @ WPI · 4.0 GPA
+                </span>
+                <h1>Transforming Data Into <span class="highlight">Actionable Intelligence</span></h1>
+                <p class="hero-description">
+                    Data Analyst specializing in scalable ETL pipelines, predictive analytics, and executive dashboards. From processing millions of daily IoT records to building ML models with 88%+ accuracy, I turn complex datasets into business impact.
+                </p>
+                
+                <!-- KPI Dashboard Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Daily Records</span>
+                            <span class="kpi-trend up">+150%</span>
+                        </div>
+                        <div class="kpi-value">1M+</div>
+                        <div class="kpi-description">IoT data points processed</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Uptime SLA</span>
+                            <span class="kpi-trend up">+4%</span>
+                        </div>
+                        <div class="kpi-value">99%</div>
+                        <div class="kpi-description">Pipeline reliability</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Efficiency</span>
+                            <span class="kpi-trend up">+85%</span>
+                        </div>
+                        <div class="kpi-value">85%</div>
+                        <div class="kpi-description">Automation gain</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Academic</span>
+                            <span class="kpi-trend up">MAX</span>
+                        </div>
+                        <div class="kpi-value">4.0</div>
+                        <div class="kpi-description">GPA at WPI</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section id="work">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">PORTFOLIO ANALYTICS</span>
+                <h2 class="section-title">Domain Expertise</h2>
+                <p class="section-description">
+                    Production-grade data solutions across engineering, finance, and business analytics
+                </p>
+            </div>
+            
+            <!-- DATA ENGINEERING -->
+            <div class="domain-header">
+                <div class="domain-icon">⚙️</div>
+                <div class="domain-info">
+                    <h3>Data Engineering</h3>
+                    <p>ETL_PIPELINES · CLOUD_INFRASTRUCTURE · DATA_QUALITY</p>
+                </div>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- IoT Pipeline -->
+                <div class="project-card">
+                    <div class="project-visual">
+                        <canvas id="pipelineChart"></canvas>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag">DATA PIPELINE</span>
+                        <h3 class="project-title">Real-Time IoT Data Pipeline</h3>
+                        <p class="project-description">
+                            Architected robust ETL pipelines processing 1M+ daily IoT sensor data points to MongoDB and Azure Blob Storage with 99% uptime. Implemented automated error handling reducing failures by 92%.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">MongoDB</span>
+                            <span class="tech-badge">Azure</span>
+                            <span class="tech-badge">ETL</span>
+                        </div>
+                        <a href="#" onclick="openModal('modal-iot'); return false;" class="project-link">View Case Study →</a>
+                    </div>
+                </div>
+                
+                <!-- Sensor Validation -->
+                <div class="project-card">
+                    <div class="project-visual">
+                        <canvas id="validationChart"></canvas>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag">AUTOMATION</span>
+                        <h3 class="project-title">Sensor Data Quality Validation</h3>
+                        <p class="project-description">
+                            Engineered Python automation scripts validating 500K+ sensor records, reducing manual quality checks by 85% with 99% accuracy. Built React dashboards tracking performance across 12 sites in real-time.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">React</span>
+                            <span class="tech-badge">Automation</span>
+                            <span class="tech-badge">Data Quality</span>
+                        </div>
+                        <a href="#" onclick="openModal('modal-sensor'); return false;" class="project-link">View Case Study →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FINANCE -->
+            <div class="domain-header" style="margin-top: 3rem;">
+                <div class="domain-icon">💰</div>
+                <div class="domain-info">
+                    <h3>Finance Analytics</h3>
+                    <p>RISK_MODELING · FORECASTING · PORTFOLIO_ANALYSIS</p>
+                </div>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Coming Soon -->
+                <div class="project-card coming-soon-card">
+                    <div class="project-visual coming-soon-visual">
+                        <div class="coming-soon-content">
+                            <div class="coming-soon-icon">📊</div>
+                            <h4 style="color: var(--text-primary); font-size: 1.5rem; margin-bottom: 0.5rem;">In Development</h4>
+                            <p style="color: var(--text-secondary); font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;">FINANCE_PROJECT_V1.0</p>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag" style="background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.3); color: var(--accent-purple);">COMING SOON</span>
+                        <h3 class="project-title">Finance Analytics Project</h3>
+                        <p class="project-description">
+                            Advanced financial modeling and predictive analytics project currently under development. Stay tuned for risk assessment, portfolio optimization, and market trend analysis.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">Financial Modeling</span>
+                            <span class="tech-badge">Risk Analysis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MARKET & BUSINESS ANALYTICS -->
+            <div class="domain-header" style="margin-top: 3rem;">
+                <div class="domain-icon">📈</div>
+                <div class="domain-info">
+                    <h3>Market & Business Analytics</h3>
+                    <p>PREDICTIVE_MODELS · CUSTOMER_INSIGHTS · OPERATIONAL_EFFICIENCY</p>
+                </div>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Churn Prediction -->
+                <div class="project-card">
+                    <div class="project-visual">
+                        <canvas id="churnChart"></canvas>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag">MACHINE LEARNING</span>
+                        <h3 class="project-title">Orange Telecom Churn Prediction</h3>
+                        <p class="project-description">
+                            Built ensemble ML model (Random Forest + XGBoost) achieving 88% accuracy on 3,300+ customer records. Created dual Tableau dashboards for churn analysis and customer segmentation, identifying that 4+ service calls increase churn risk by 300%.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">Scikit-learn</span>
+                            <span class="tech-badge">Tableau</span>
+                            <span class="tech-badge">XGBoost</span>
+                        </div>
+                        <a href="#" onclick="openModal('modal-churn'); return false;" class="project-link">View Case Study →</a>
+                    </div>
+                </div>
+                
+                <!-- DoorDash -->
+                <div class="project-card">
+                    <div class="project-visual">
+                        <canvas id="deliveryChart"></canvas>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag">DATA ANALYSIS</span>
+                        <h3 class="project-title">DoorDash Delivery Patterns</h3>
+                        <p class="project-description">
+                            Applied k-means clustering to 50K+ delivery records identifying 4 distinct operational patterns. Discovered association rules with 100% confidence levels revealing key relationships for resource optimization.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">Clustering</span>
+                            <span class="tech-badge">Pattern Mining</span>
+                            <span class="tech-badge">Visualization</span>
+                        </div>
+                        <a href="https://github.com/finesse2307/DoorDash-business-process-optimization" target="_blank" class="project-link">View on GitHub →</a>
+                    </div>
+                </div>
+                
+                <!-- AI Workflows -->
+                <div class="project-card">
+                    <div class="project-visual">
+                        <canvas id="aiChart"></canvas>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag">AI-ASSISTED</span>
+                        <h3 class="project-title">AI-Powered Analysis Workflows</h3>
+                        <p class="project-description">
+                            Leveraged Claude AI and ChatGPT to automate Python script generation and SQL query development, reducing analysis setup time by 60% while maintaining code quality and improving team productivity.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Claude AI</span>
+                            <span class="tech-badge">ChatGPT</span>
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">SQL</span>
+                        </div>
+                        <a href="#" onclick="openModal('modal-ai'); return false;" class="project-link">View Case Study →</a>
+                    </div>
+                </div>
+                
+                <!-- Product Hype Analyzer -->
+                <div class="project-card">
+                    <div class="project-visual" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%); display: flex; align-items: center; justify-content: center; min-height: 280px;">
+                        <div style="text-align: center; padding: 2rem;">
+                            <div style="font-size: 5rem; margin-bottom: 1rem;">📱</div>
+                            <div style="font-family: 'IBM Plex Mono', monospace; color: var(--accent-purple); font-size: 0.9rem; font-weight: 600;">SENTIMENT ANALYSIS</div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-tag">NLP ANALYSIS</span>
+                        <h3 class="project-title">Product Hype Analyzer</h3>
+                        <p class="project-description">
+                            Natural language processing pipeline analyzing social media sentiment and product mentions to quantify market hype and predict product success. Processed thousands of posts to extract actionable consumer insights.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">NLP</span>
+                            <span class="tech-badge">Sentiment Analysis</span>
+                            <span class="tech-badge">Data Mining</span>
+                        </div>
+                        <a href="https://github.com/finesse2307/Product-Hype-Analyzer" target="_blank" class="project-link">View on GitHub →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section id="skills" class="skills-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">TECHNICAL STACK</span>
+                <h2 class="section-title">Core Competencies</h2>
+                <p class="section-description">
+                    End-to-end data analytics toolkit from SQL to machine learning deployment
+                </p>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <div class="skill-icon">🐍</div>
+                    <h3>Analysis & ML</h3>
+                    <p class="skill-description">Statistical modeling, predictive analytics, and machine learning pipelines</p>
+                    <ul class="skill-list">
+                        <li>Python (Pandas, NumPy, Scikit-Learn)</li>
+                        <li>R for Statistical Analysis</li>
+                        <li>Machine Learning (RF, XGBoost, SVM)</li>
+                        <li>Time-Series Forecasting</li>
+                        <li>A/B Testing & Experimentation</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <div class="skill-icon">📊</div>
+                    <h3>Visualization & BI</h3>
+                    <p class="skill-description">Dashboard design and data storytelling for executive decision-making</p>
+                    <ul class="skill-list">
+                        <li>Tableau for Interactive Dashboards</li>
+                        <li>Power BI & DAX</li>
+                        <li>Matplotlib & Seaborn</li>
+                        <li>Dashboard Design & KPI Tracking</li>
+                        <li>Data Storytelling</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <div class="skill-icon">⚙️</div>
+                    <h3>Engineering & AI</h3>
+                    <p class="skill-description">Building scalable data infrastructure and leveraging AI for productivity</p>
+                    <ul class="skill-list">
+                        <li>ETL Pipeline Architecture</li>
+                        <li>MongoDB & Azure Storage</li>
+                        <li>Claude AI & ChatGPT Integration</li>
+                        <li>Query Optimization</li>
+                        <li>Data Automation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="contact-title">Let's Build Something</h2>
+                <p class="contact-description">
+                    Currently seeking full-time data analyst opportunities. Whether you're scaling a data team or need expert analysis, let's discuss how I can drive impact.
+                </p>
+                
+                <a href="/cdn-cgi/l/email-protection#0271716a676566674275726b2c676677" class="contact-email"><span class="__cf_email__" data-cfemail="a1d2d2c9c4c6c5c4e1d6d1c88fc4c5d4">[email&#160;protected]</span></a>
+                
+                <div class="social-grid">
+                    <a href="https://linkedin.com/in/s-s-hegde" target="_blank" class="social-card">
+                        <span class="social-icon">💼</span>
+                        <span class="social-label">LinkedIn</span>
+                    </a>
+                    <a href="#" class="social-card">
+                        <span class="social-icon">👨‍💻</span>
+                        <span class="social-label">GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2024 SAGAR.HEGDE // WORCESTER_MA // DATA_ANALYST</p>
+        </div>
+    </footer>
+    
+    <!-- Modals -->
+    
+    <!-- IoT Pipeline Modal -->
+    <div id="modal-iot" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-close" onclick="closeModal('modal-iot')">&times;</span>
+                <span class="modal-tag">DATA PIPELINE</span>
+                <h2 class="modal-title">Real-Time IoT Data Pipeline</h2>
+                <p class="modal-subtitle">SCALABLE_ETL · CLOUD_INFRASTRUCTURE · 99%_UPTIME</p>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>// CHALLENGE</h3>
+                    <p>Organization needed to process massive volumes of IoT sensor data from distributed devices in real-time, with strict uptime requirements and data integrity constraints. Legacy system couldn't handle scale and frequently failed during peak loads.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// SOLUTION</h3>
+                    <p>Architected a robust ETL pipeline using Python that ingests, validates, and stores 1M+ daily sensor readings across MongoDB and Azure Blob Storage. Implemented comprehensive error handling, data validation, and automated recovery mechanisms.</p>
+                    <ul>
+                        <li>Designed modular Python pipeline with retry logic and graceful degradation</li>
+                        <li>Implemented real-time data validation and quality checks at ingestion</li>
+                        <li>Built automated monitoring and alerting system for pipeline health</li>
+                        <li>Optimized batch processing and parallel execution for throughput</li>
+                        <li>Created fallback mechanisms to prevent data loss during failures</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// IMPACT</h3>
+                    <div class="modal-metrics">
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">1M+</span>
+                            <span class="modal-metric-label">Daily Records</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">99%</span>
+                            <span class="modal-metric-label">Uptime SLA</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">92%</span>
+                            <span class="modal-metric-label">Failure Reduction</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// TECHNOLOGIES</h3>
+                    <div class="modal-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">MongoDB</span>
+                        <span class="tech-badge">Azure Blob Storage</span>
+                        <span class="tech-badge">ETL Design</span>
+                        <span class="tech-badge">Error Handling</span>
+                        <span class="tech-badge">Data Validation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sensor Validation Modal -->
+    <div id="modal-sensor" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-close" onclick="closeModal('modal-sensor')">&times;</span>
+                <span class="modal-tag">AUTOMATION</span>
+                <h2 class="modal-title">Sensor Data Quality Validation</h2>
+                <p class="modal-subtitle">DATA_QUALITY · AUTOMATION · REACT_DASHBOARD</p>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>// CHALLENGE</h3>
+                    <p>Manual quality checks on 500K+ sensor records were time-consuming, error-prone, and couldn't scale across 12 different sites. Data quality issues were discovered weeks after collection, causing costly downstream problems.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// SOLUTION</h3>
+                    <p>Engineered comprehensive Python automation framework that validates sensor data across six quality dimensions: completeness, accuracy, consistency, timeliness, validity, and uniqueness. Built React dashboards for real-time monitoring across all sites.</p>
+                    <ul>
+                        <li>Developed automated validation scripts with 99% accuracy across multiple quality metrics</li>
+                        <li>Created rule-based engine to detect anomalies and data integrity issues</li>
+                        <li>Built interactive React dashboards showing quality KPIs in real-time</li>
+                        <li>Implemented alerting system for critical data quality violations</li>
+                        <li>Reduced manual validation workload by 85% while improving accuracy</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// IMPACT</h3>
+                    <div class="modal-metrics">
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">500K+</span>
+                            <span class="modal-metric-label">Records Validated</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">85%</span>
+                            <span class="modal-metric-label">Manual Reduction</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">99%</span>
+                            <span class="modal-metric-label">Accuracy Rate</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// TECHNOLOGIES</h3>
+                    <div class="modal-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">React</span>
+                        <span class="tech-badge">Data Quality</span>
+                        <span class="tech-badge">Automation</span>
+                        <span class="tech-badge">Dashboards</span>
+                        <span class="tech-badge">Real-time Monitoring</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Customer Churn Modal -->
+    <div id="modal-churn" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-close" onclick="closeModal('modal-churn')">&times;</span>
+                <span class="modal-tag">MACHINE LEARNING</span>
+                <h2 class="modal-title">Orange Telecom Customer Churn Prediction</h2>
+                <p class="modal-subtitle">ENSEMBLE_MODELS · CUSTOMER_SEGMENTATION · TABLEAU_DASHBOARDS</p>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>// CHALLENGE</h3>
+                    <p>Orange Telecom needed to identify high-risk customers likely to churn and understand the key drivers of customer attrition. With 3,300+ customer records spanning usage patterns, service plans, and customer service interactions, manual analysis couldn't provide the predictive accuracy needed for effective retention campaigns.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// SOLUTION</h3>
+                    <p>Built comprehensive analytics solution combining machine learning classification models with interactive Tableau dashboards. Analyzed customer behavior across multiple dimensions including account tenure, international plans, voicemail usage, customer service calls, and usage patterns (day/evening/night/international).</p>
+                    <ul>
+                        <li>Engineered 20+ features including usage ratios, charge-per-minute metrics, and tenure groupings</li>
+                        <li>Developed ensemble classification model (Random Forest + Gradient Boosting) achieving 88% accuracy</li>
+                        <li>Created risk segmentation framework with 5 customer tiers: Very High, High, Medium, Low, Very Low risk</li>
+                        <li>Built dual Tableau dashboards: Churn Analysis (predictive metrics) and Customer Segmentation (behavioral clustering)</li>
+                        <li>Identified key churn drivers: customer service calls, international plan status, account length, and usage patterns</li>
+                        <li>Calculated estimated revenue impact and monthly revenue per customer segment</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// KEY INSIGHTS</h3>
+                    <ul>
+                        <li>Customers with 4+ service calls show 300% higher churn rate</li>
+                        <li>International plan subscribers have distinct churn patterns requiring targeted interventions</li>
+                        <li>High day-usage customers (>250 minutes) exhibit different retention needs</li>
+                        <li>State-level analysis revealed geographic churn hotspots for localized campaigns</li>
+                        <li>Tenure segmentation enabled lifecycle-based retention strategies</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// IMPACT</h3>
+                    <div class="modal-metrics">
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">88%</span>
+                            <span class="modal-metric-label">Model Accuracy</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">0.91</span>
+                            <span class="modal-metric-label">AUC Score</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">35%</span>
+                            <span class="modal-metric-label">Targeting Precision Gain</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1.5rem;">Enabled data-driven retention campaigns with customer-specific interventions based on risk tier and behavioral segment. Revenue impact modeling helped prioritize high-value customer retention efforts.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// DELIVERABLES</h3>
+                    <ul>
+                        <li><strong>Churn Analysis Dashboard:</strong> Real-time churn rate tracking by plan type, state, service calls, and usage patterns</li>
+                        <li><strong>Customer Segmentation Dashboard:</strong> Behavioral clustering with tenure, LTV, and engagement scores</li>
+                        <li><strong>Predictive Model:</strong> Ensemble classifier with interpretable feature importance</li>
+                        <li><strong>Risk Scoring System:</strong> 5-tier customer classification for targeted retention</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// TECHNOLOGIES</h3>
+                    <div class="modal-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Scikit-learn</span>
+                        <span class="tech-badge">Random Forest</span>
+                        <span class="tech-badge">XGBoost</span>
+                        <span class="tech-badge">Tableau</span>
+                        <span class="tech-badge">Feature Engineering</span>
+                        <span class="tech-badge">Customer Segmentation</span>
+                        <span class="tech-badge">Predictive Analytics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI Workflows Modal -->
+    <div id="modal-ai" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-close" onclick="closeModal('modal-ai')">&times;</span>
+                <span class="modal-tag">AI-ASSISTED</span>
+                <h2 class="modal-title">AI-Powered Analysis Workflows</h2>
+                <p class="modal-subtitle">CLAUDE_AI · CHATGPT · 60%_TIME_SAVINGS</p>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>// CHALLENGE</h3>
+                    <p>Data analysis tasks involved repetitive coding patterns, boilerplate SQL queries, and time-consuming documentation. Team productivity was bottlenecked by setup time rather than actual analysis.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// SOLUTION</h3>
+                    <p>Integrated Claude AI and ChatGPT into data workflows to automate script generation, query writing, and documentation. Developed prompt engineering techniques and quality control processes to maintain code standards.</p>
+                    <ul>
+                        <li>Automated Python script generation for common data analysis patterns</li>
+                        <li>Used AI to generate optimized SQL queries from natural language requirements</li>
+                        <li>Implemented AI-assisted code review and documentation generation</li>
+                        <li>Created prompt templates for consistent, high-quality outputs</li>
+                        <li>Reduced analysis setup time by 60% while maintaining quality standards</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// IMPACT</h3>
+                    <div class="modal-metrics">
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">60%</span>
+                            <span class="modal-metric-label">Time Savings</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">5</span>
+                            <span class="modal-metric-label">Tasks Automated</span>
+                        </div>
+                        <div class="modal-metric">
+                            <span class="modal-metric-value">100%</span>
+                            <span class="modal-metric-label">Quality Maintained</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>// TECHNOLOGIES</h3>
+                    <div class="modal-tech">
+                        <span class="tech-badge">Claude AI</span>
+                        <span class="tech-badge">ChatGPT</span>
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">SQL</span>
+                        <span class="tech-badge">Prompt Engineering</span>
+                        <span class="tech-badge">Workflow Automation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Chart.js Configuration
+        Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+        Chart.defaults.color = '#94A3B8';
+        
+        // 1. IoT Pipeline - Dual-axis Line Chart
+        const pipelineCtx = document.getElementById('pipelineChart');
+        if (pipelineCtx) {
+            new Chart(pipelineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                    datasets: [{
+                        label: 'Records Processed (M)',
+                        data: [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y',
+                        pointRadius: 5,
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#141B3D',
+                        pointBorderWidth: 2
+                    }, {
+                        label: 'Uptime %',
+                        data: [97, 98, 98.5, 99, 99, 99.2, 99.1, 99],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        yAxisID: 'y1',
+                        pointRadius: 4,
+                        pointBackgroundColor: '#10B981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { 
+                                color: '#94A3B8',
+                                font: { size: 11, family: "'IBM Plex Mono', monospace" },
+                                padding: 15
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Pipeline Performance Metrics (8-Week Trend)',
+                            color: '#E2E8F0',
+                            font: { size: 13, weight: 'bold', family: "'IBM Plex Mono', monospace" },
+                            padding: 20
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8', font: { size: 10 } }
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: 'Records (Millions)', color: '#3B82F6', font: { size: 11 } },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: 'Uptime %', color: '#10B981', font: { size: 11 } },
+                            grid: { display: false },
+                            ticks: { color: '#94A3B8' },
+                            min: 95,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 2. Sensor Validation - Radar Chart
+        const validationCtx = document.getElementById('validationChart');
+        if (validationCtx) {
+            new Chart(validationCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Completeness', 'Accuracy', 'Consistency', 'Timeliness', 'Validity', 'Uniqueness'],
+                    datasets: [{
+                        label: 'Before Automation',
+                        data: [72, 68, 65, 60, 70, 75],
+                        borderColor: 'rgba(148, 163, 184, 0.6)',
+                        backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(148, 163, 184, 0.8)',
+                        pointRadius: 4
+                    }, {
+                        label: 'After Automation',
+                        data: [99, 99, 98, 100, 99, 100],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#10B981',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#94A3B8', font: { size: 11 }, padding: 15 }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Data Quality Improvement (85% Manual Reduction)',
+                            color: '#E2E8F0',
+                            font: { size: 13, weight: 'bold', family: "'IBM Plex Mono', monospace" },
+                            padding: 20
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
+                            grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                            pointLabels: { color: '#94A3B8', font: { size: 10 } },
+                            ticks: { 
+                                color: '#94A3B8',
+                                backdropColor: 'transparent',
+                                min: 0,
+                                max: 100,
+                                stepSize: 25
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 3. Churn Prediction - ROC Curve
+        const churnCtx = document.getElementById('churnChart');
+        if (churnCtx) {
+            new Chart(churnCtx, {
+                type: 'line',
+                data: {
+                    labels: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                    datasets: [{
+                        label: 'Random Forest (AUC: 0.91)',
+                        data: [0, 0.15, 0.35, 0.55, 0.70, 0.82, 0.88, 0.92, 0.95, 0.98, 1.0],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#141B3D',
+                        pointBorderWidth: 2
+                    }, {
+                        label: 'Baseline',
+                        data: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                        borderColor: 'rgba(148, 163, 184, 0.5)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#94A3B8', font: { size: 11 }, padding: 15 }
+                        },
+                        title: {
+                            display: true,
+                            text: 'ROC Curve - Model Performance (88% Accuracy)',
+                            color: '#E2E8F0',
+                            font: { size: 13, weight: 'bold', family: "'IBM Plex Mono', monospace" },
+                            padding: 20
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'False Positive Rate', color: '#94A3B8', font: { size: 11 } },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8', font: { size: 10 } }
+                        },
+                        y: {
+                            title: { display: true, text: 'True Positive Rate', color: '#94A3B8', font: { size: 11 } },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 4. DoorDash Delivery - Bar Chart
+        const deliveryCtx = document.getElementById('deliveryChart');
+        if (deliveryCtx) {
+            new Chart(deliveryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM'],
+                    datasets: [{
+                        label: 'Deliveries',
+                        data: [2400, 3200, 5100, 8900, 9500, 6700, 5200, 7800, 12600, 11200, 9800, 8100, 6400, 4200],
+                        backgroundColor: function(context) {
+                            const value = context.parsed.y;
+                            return value > 12000 ? '#3B82F6' : 'rgba(59, 130, 246, 0.6)';
+                        },
+                        borderColor: '#3B82F6',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Hourly Delivery Volume (Peak 300% at 5-6 PM)',
+                            color: '#E2E8F0',
+                            font: { size: 13, weight: 'bold', family: "'IBM Plex Mono', monospace" },
+                            padding: 20
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8', font: { size: 9 } }
+                        },
+                        y: {
+                            title: { display: true, text: 'Number of Deliveries', color: '#94A3B8', font: { size: 11 } },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 5. AI Workflow - Before/After Comparison
+        const aiCtx = document.getElementById('aiChart');
+        if (aiCtx) {
+            new Chart(aiCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Script Dev', 'Query Writing', 'Data Cleaning', 'Documentation', 'Code Review'],
+                    datasets: [{
+                        label: 'Before AI Tools (hours)',
+                        data: [8, 6, 12, 5, 4],
+                        backgroundColor: 'rgba(148, 163, 184, 0.4)',
+                        borderColor: 'rgba(148, 163, 184, 0.8)',
+                        borderWidth: 2
+                    }, {
+                        label: 'After AI Tools (hours)',
+                        data: [3, 2, 5, 2, 2],
+                        backgroundColor: '#10B981',
+                        borderColor: '#10B981',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#94A3B8', font: { size: 11 }, padding: 15 }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time Savings with AI-Assisted Workflows (60% Faster)',
+                            color: '#E2E8F0',
+                            font: { size: 13, weight: 'bold', family: "'IBM Plex Mono', monospace" },
+                            padding: 20
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8', font: { size: 10 } }
+                        },
+                        y: {
+                            title: { display: true, text: 'Time (hours)', color: '#94A3B8', font: { size: 11 } },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#94A3B8' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                            const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
